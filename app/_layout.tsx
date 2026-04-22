@@ -1,5 +1,6 @@
 import '@/global.css';
 import { AuthProvider } from '@/contexts/AuthContext';
+import { SettingsProvider } from '@/contexts/SettingsContext';
 import useAuth from '@/hooks/auth/useAuth';
 import { NAV_THEME } from '@/lib/theme';
 import { ThemeProvider } from '@react-navigation/native';
@@ -19,11 +20,13 @@ export default function RootLayout() {
   const { colorScheme } = useColorScheme();
   return (
     <AuthProvider>
-      <ThemeProvider value={NAV_THEME[colorScheme ?? 'light']}>
-        <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-        <Routes />
-        <PortalHost />
-      </ThemeProvider>
+      <SettingsProvider>
+        <ThemeProvider value={NAV_THEME[colorScheme ?? 'light']}>
+          <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+          <Routes />
+          <PortalHost />
+        </ThemeProvider>
+      </SettingsProvider>
     </AuthProvider>
   );
 }
@@ -56,7 +59,7 @@ function Routes() {
       {/* Screens only shown when the user IS signed in */}
       <Stack.Screen name="index" />
       <Stack.Protected guard={isSignedIn}>
-
+        <Stack.Screen name="settings" options={{ title: '설정' }} />
       </Stack.Protected>
 
       {/* Screens outside the guards are accessible to everyone (e.g. not found) */}
