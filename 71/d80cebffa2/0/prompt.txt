@@ -1,0 +1,18 @@
+이제 dev 브랜치로 checkout하고 작업을 진행할거야
+
+---
+
+#1 issue 진행해줘
+
+---
+
+plan 하는 걸 까먹었어. 괜찮은지 확인하고 계획세워줘.
+
+---
+
+expo 관련 의존성은 pnpx expo install {패키지 이름}으로 해야해. skill 편집해줘.
+브랜치명도 {prefix}/#{issue_number}인데 #이 빠졌어. 이것도 claude.md 편집해줘
+
+---
+
+그렇게 해주세요
