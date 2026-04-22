@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.5.5",
+  "checkpoint_id": "eb58c90542a2",
+  "strategy": "manual-commit",
+  "branch": "feature/#3",
+  "checkpoints_count": 0,
+  "files_touched": [
+    "lib/timeline/settingsStorage.ts",
+    "lib/timeline/settingsTypes.ts",
+    "lib/timeline/types.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/eb/58c90542a2/0/metadata.json",
+      "transcript": "/eb/58c90542a2/0/full.jsonl",
+      "content_hash": "/eb/58c90542a2/0/content_hash.txt",
+      "prompt": "/eb/58c90542a2/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 46,
+    "cache_creation_tokens": 57001,
+    "cache_read_tokens": 1322116,
+    "output_tokens": 21325,
+    "api_call_count": 30
+  }
+}
