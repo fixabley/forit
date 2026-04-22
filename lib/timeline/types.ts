@@ -7,7 +7,7 @@ export interface Status {
 
 export interface TimelineEntry {
   id: string;
-  statusId: string;
+  statusId: string | null; // null = unlabeled
   startTime: number; // unix ms
   endTime: number | null; // null = currently active
 }
