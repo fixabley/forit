@@ -8,11 +8,11 @@ interface TimelineContextValue {
   statuses: Status[];
   activeEntry: TimelineEntry | null;
   isTracking: boolean;
-  selectedStatusId: string;
   zoomLevel: number;
   startTracking: () => void;
   stopTracking: () => void;
-  selectStatus: (id: string) => void;
+  transition: () => void;
+  labelEntry: (id: string, statusId: string) => void;
   addStatus: (label: string, color: string) => void;
   zoomIn: () => void;
   zoomOut: () => void;
@@ -23,7 +23,6 @@ const TimelineContext = React.createContext<TimelineContextValue | null>(null);
 export function TimelineProvider({ children }: { children: React.ReactNode }) {
   const [entries, setEntries] = React.useState<TimelineEntry[]>([]);
   const [customStatuses, setCustomStatuses] = React.useState<Status[]>([]);
-  const [selectedStatusId, setSelectedStatusId] = React.useState(DEFAULT_STATUSES[0].id);
   const [zoomLevel, setZoomLevel] = React.useState(1.0);
 
   const statuses = React.useMemo(
@@ -38,7 +37,6 @@ export function TimelineProvider({ children }: { children: React.ReactNode }) {
 
   const isTracking = activeEntry !== null;
 
-  // Load persisted data on mount
   React.useEffect(() => {
     (async () => {
       const [storedEntries, storedCustomStatuses] = await Promise.all([
@@ -50,31 +48,47 @@ export function TimelineProvider({ children }: { children: React.ReactNode }) {
     })();
   }, []);
 
+  const save = React.useCallback((next: TimelineEntry[]) => {
+    setEntries(next);
+    timelineStorage.saveEntries(next);
+  }, []);
+
   const startTracking = React.useCallback(() => {
     if (isTracking) return;
     const entry: TimelineEntry = {
       id: Date.now().toString(),
-      statusId: selectedStatusId,
+      statusId: null,
       startTime: Date.now(),
       endTime: null,
     };
-    const next = [...entries, entry];
-    setEntries(next);
-    timelineStorage.saveEntries(next);
-  }, [isTracking, selectedStatusId, entries]);
+    save([...entries, entry]);
+  }, [isTracking, entries, save]);
 
   const stopTracking = React.useCallback(() => {
     if (!activeEntry) return;
-    const next = entries.map((e) =>
+    save(entries.map((e) =>
       e.id === activeEntry.id ? { ...e, endTime: Date.now() } : e
-    );
-    setEntries(next);
-    timelineStorage.saveEntries(next);
-  }, [activeEntry, entries]);
+    ));
+  }, [activeEntry, entries, save]);
 
-  const selectStatus = React.useCallback((id: string) => {
-    setSelectedStatusId(id);
-  }, []);
+  const transition = React.useCallback(() => {
+    if (!activeEntry) return;
+    const now = Date.now();
+    const closed = entries.map((e) =>
+      e.id === activeEntry.id ? { ...e, endTime: now } : e
+    );
+    const next: TimelineEntry = {
+      id: now.toString(),
+      statusId: null,
+      startTime: now,
+      endTime: null,
+    };
+    save([...closed, next]);
+  }, [activeEntry, entries, save]);
+
+  const labelEntry = React.useCallback((id: string, statusId: string) => {
+    save(entries.map((e) => (e.id === id ? { ...e, statusId } : e)));
+  }, [entries, save]);
 
   const addStatus = React.useCallback(
     (label: string, color: string) => {
@@ -105,19 +119,18 @@ export function TimelineProvider({ children }: { children: React.ReactNode }) {
       statuses,
       activeEntry,
       isTracking,
-      selectedStatusId,
       zoomLevel,
       startTracking,
       stopTracking,
-      selectStatus,
+      transition,
+      labelEntry,
       addStatus,
       zoomIn,
       zoomOut,
     }),
     [
-      entries, statuses, activeEntry, isTracking,
-      selectedStatusId, zoomLevel,
-      startTracking, stopTracking, selectStatus, addStatus, zoomIn, zoomOut,
+      entries, statuses, activeEntry, isTracking, zoomLevel,
+      startTracking, stopTracking, transition, labelEntry, addStatus, zoomIn, zoomOut,
     ]
   );
 
