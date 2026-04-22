@@ -10,8 +10,7 @@
     "clean": "rm -rf .expo node_modules"
   },
   "dependencies": {
-    "@clerk/clerk-expo": "^2.19.31",
-    "@react-navigation/native": "^7.0.0",
+"@react-navigation/native": "^7.0.0",
     "@rn-primitives/avatar": "^1.4.0",
     "@rn-primitives/label": "^1.4.0",
     "@rn-primitives/popover": "^1.4.0",
@@ -23,6 +22,7 @@
     "expo": "~55.0.9",
     "expo-auth-session": "~55.0.10",
     "expo-constants": "~55.0.9",
+    "expo-dev-client": "~55.0.27",
     "expo-linking": "~55.0.9",
     "expo-router": "~55.0.8",
     "expo-secure-store": "~55.0.9",

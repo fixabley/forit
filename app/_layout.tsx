@@ -1,8 +1,7 @@
 import '@/global.css';
-
+import { AuthProvider } from '@/contexts/AuthContext';
+import useAuth from '@/hooks/auth/useAuth';
 import { NAV_THEME } from '@/lib/theme';
-import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
-import { tokenCache } from '@clerk/clerk-expo/token-cache';
 import { ThemeProvider } from '@react-navigation/native';
 import { PortalHost } from '@rn-primitives/portal';
 import { Stack } from 'expo-router';
@@ -18,15 +17,14 @@ export {
 
 export default function RootLayout() {
   const { colorScheme } = useColorScheme();
-
   return (
-    <ClerkProvider tokenCache={tokenCache}>
+    <AuthProvider>
       <ThemeProvider value={NAV_THEME[colorScheme ?? 'light']}>
         <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
         <Routes />
         <PortalHost />
       </ThemeProvider>
-    </ClerkProvider>
+    </AuthProvider>
   );
 }
 
@@ -56,8 +54,9 @@ function Routes() {
       </Stack.Protected>
 
       {/* Screens only shown when the user IS signed in */}
+      <Stack.Screen name="index" />
       <Stack.Protected guard={isSignedIn}>
-        <Stack.Screen name="index" />
+
       </Stack.Protected>
 
       {/* Screens outside the guards are accessible to everyone (e.g. not found) */}
