@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "minimal",
-    "slug": "minimal",
+    "slug": "forit",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -16,13 +16,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.fixabley.forit"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.fixabley.forit"
     },
     "web": {
       "bundler": "metro",
@@ -34,6 +36,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "acc8aac4-da22-4d9e-ace9-73e9c592c8a7"
+      }
+    },
+    "owner": "fixabley"
   }
 }
